@@ -1,0 +1,27 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="535" height="340" viewBox="0 0 535 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 3" clip-path="url(#clip0_0_8)">
+<g id="Frame 2">
+<path id="Ellipse 1" d="M670 14.5C670 119.158 585.158 204 480.5 204C375.842 204 291 119.158 291 14.5C291 -90.158 375.842 -175 480.5 -175C585.158 -175 670 -90.158 670 14.5Z" fill="url(#paint0_linear_0_8)"/>
+<circle id="Ellipse 2" cx="255" cy="130" r="169" fill="url(#paint1_linear_0_8)"/>
+<path id="Ellipse 3" d="M489 290C489 349.094 441.318 397 382.5 397C323.682 397 276 349.094 276 290C276 230.906 323.682 183 382.5 183C441.318 183 489 230.906 489 290Z" fill="url(#paint2_linear_0_8)"/>
+</g>
+<path id="Rectangle 1" d="M-1003 0H1642V1024H-1003V0Z" fill="#D8FFE6" fill-opacity="0.2"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_8" x1="732.219" y1="191.367" x2="732.219" y2="570.367" gradientUnits="userSpaceOnUse">
+<stop stop-color="#8AFBFB"/>
+<stop offset="1" stop-color="#7AFB91"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_8" x1="255" y1="-39" x2="255" y2="299" gradientUnits="userSpaceOnUse">
+<stop stop-color="#026B83"/>
+<stop offset="1" stop-color="#98E7BE"/>
+</linearGradient>
+<linearGradient id="paint2_linear_0_8" x1="-12.7124" y1="386.268" x2="-13.0295" y2="600.268" gradientUnits="userSpaceOnUse">
+<stop offset="0.3772" stop-color="#9EE9C0"/>
+<stop offset="1" stop-color="#C3A6FF"/>
+</linearGradient>
+<clipPath id="clip0_0_8">
+<rect width="535" height="340" fill="white"/>
+</clipPath>
+</defs>
+</svg>
