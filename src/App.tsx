@@ -134,27 +134,41 @@ function Login({ go }: { go: (page: Page) => void }) {
       </div>
       <main className="login-main">
         <section className="login-card">
-          <h1>Entrar</h1>
+          <div className="login-header">
+            <h1>Entrar</h1>
+            <p>Informe suas credenciais para acessar o painel de atendimento.</p>
+          </div>
           <label>
             E-mail
             <input type="email" defaultValue="fernanda@consultoriarocha.com.br" />
           </label>
-          <label>
-            Senha
-            <div className="inline-control">
-              <input type={show ? "text" : "password"} />
-              <button className="button secondary compact" onClick={() => setShow(!show)}>
+          <div className="login-password-group">
+            <div className="login-password-head">
+              <strong>Senha</strong>
+              <a className="forgot-link">Esqueci minha senha</a>
+            </div>
+            <div className="login-password-field">
+              <input type={show ? "text" : "password"} placeholder="Digite sua senha" />
+              <button
+                type="button"
+                className="login-show-btn"
+                onClick={() => setShow(!show)}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
                 {show ? "Ocultar" : "Mostrar"}
               </button>
             </div>
+          </div>
+          <label className="login-remember">
+            <input type="checkbox" />
+            <span>Manter conectado neste dispositivo</span>
           </label>
-          <button className="button primary full" onClick={() => go("home")}>
+          <button className="button primary full login-submit" onClick={() => go("home")}>
             Entrar com senha
           </button>
-          <div className="login-links">
-            <a>Esqueci minha senha</a>
-            <a>Recebi um convite</a>
-          </div>
         </section>
       </main>
     </>
