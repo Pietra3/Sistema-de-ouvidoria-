@@ -8,6 +8,7 @@ type Page =
   | "report"
   | "review"
   | "receipt"
+  | "tracking-search"
   | "tracking-waiting"
   | "tracking-analysis"
   | "tracking-answered"
@@ -93,7 +94,7 @@ function Header({ go, complaint = false }: { go: (page: Page) => void; complaint
         </button>
         <nav>
           <button onClick={() => go("home")}>Início</button>
-          <button onClick={() => go(complaint ? "complaint-tracking-waiting" : "tracking-waiting")}>
+          <button onClick={() => go(complaint ? "complaint-tracking-waiting" : "tracking-search")}>
             Acompanhar protocolo
           </button>
         </nav>
@@ -760,9 +761,10 @@ function Tracking({
   state,
 }: {
   go: (p: Page) => void;
-  state: "waiting" | "analysis" | "answered";
+  state: "search" | "waiting" | "analysis" | "answered";
 }) {
   const [show, setShow] = useState(false);
+  const searching = state === "search";
   const waiting = state === "waiting";
   const answered = state === "answered";
   return (
@@ -770,13 +772,22 @@ function Tracking({
       <section className="tracking-hero">
         <div className="wide">
           <p className="eyebrow">Acompanhar protocolo</p>
-          <div>
-            <h1>2026-000123</h1>
-            <span className={`status ${waiting ? "waiting" : ""} ${answered ? "answered" : ""}`}>
-              {waiting ? "Aguardando você" : answered ? "Respondida" : "●  Em análise"}
-            </span>
-          </div>
-          <p>Reclamação · Cursos e capacitações · Sebrae/GO</p>
+          {searching ? (
+            <>
+              <h1 className="tracking-search-title">Acompanhar protocolo</h1>
+              <p>Digite o número do protocolo e a chave de acesso que estão no seu comprovante.</p>
+            </>
+          ) : (
+            <>
+              <div>
+                <h1>2026-000123</h1>
+                <span className={`status ${waiting ? "waiting" : ""} ${answered ? "answered" : ""}`}>
+                  {waiting ? "Aguardando você" : answered ? "Respondida" : "●  Em análise"}
+                </span>
+              </div>
+              <p>Reclamação · Cursos e capacitações · Sebrae/GO</p>
+            </>
+          )}
         </div>
       </section>
       <main className="wide tracking-grid">
@@ -785,13 +796,17 @@ function Tracking({
             <h2>Consultar</h2>
             <label>
               Protocolo
-              <input defaultValue="2026-000123" />
+              {searching ? (
+                <input key="search-input" placeholder="2026-000000" />
+              ) : (
+                <input key="filled-input" defaultValue="2026-000123" />
+              )}
             </label>
             <small>Exemplo: 2026-000123</small>
             <label>
               Chave de acesso
               <div className="follow-key-field">
-                <input type={show ? "text" : "password"} placeholder="XXXX-XXXX-XXXX" />
+                <input type={show ? "text" : "password"} placeholder="XXXX-XXXX-XXXX-XXXX" />
                 <button
                   type="button"
                   className="follow-key-toggle"
@@ -805,35 +820,53 @@ function Tracking({
               16 letras e números, como no comprovante. 4 de 5 tentativas restantes. Depois disso, a
               consulta fica bloqueada por 30 minutos.
             </p>
-            <button className="button primary full">Consultar</button>
+            <button className="button primary full" onClick={() => go("tracking-waiting")}>
+              Consultar
+            </button>
             <a>Perdi minha chave</a>
           </section>
-          <section className="side-card timeline">
-            <h2>Andamento</h2>
-            {[
-              ["Recebida", "21/10/2026 · 14:32"],
-              ["Em análise", "21/10/2026 · 15:10"],
-              ["Aguardando você", "30/10/2026 · pedido de complemento"],
-              ["Respondida", answered ? "06/11/2026 · 16:05" : "—"],
-            ].map(([a, b], i) => (
-              <div
-                className={waiting && i === 2 ? "current" : answered && i === 3 ? "complete" : ""}
-                key={a}
-              >
-                <i style={i === 3 && !answered ? { background: "#fff" } : undefined}></i>
-                <p>
-                  <b>{a}</b>
-                  <small>{b}</small>
-                </p>
-              </div>
-            ))}
-          </section>
-          <button className="button secondary" onClick={() => go("home")}>
-            Sair
-          </button>
+          {!searching && (
+            <>
+              <section className="side-card timeline">
+                <h2>Andamento</h2>
+                {[
+                  ["Recebida", "21/10/2026 · 14:32"],
+                  ["Em análise", "21/10/2026 · 15:10"],
+                  ["Aguardando você", "30/10/2026 · pedido de complemento"],
+                  ["Respondida", answered ? "06/11/2026 · 16:05" : "—"],
+                ].map(([a, b], i) => (
+                  <div
+                    className={waiting && i === 2 ? "current" : answered && i === 3 ? "complete" : ""}
+                    key={a}
+                  >
+                    <i style={i === 3 && !answered ? { background: "#fff" } : undefined}></i>
+                    <p>
+                      <b>{a}</b>
+                      <small>{b}</small>
+                    </p>
+                  </div>
+                ))}
+              </section>
+              <button className="button secondary" onClick={() => go("home")}>
+                Sair
+              </button>
+            </>
+          )}
         </aside>
         <div className="tracking-content">
-          {answered ? (
+          {searching ? (
+            <section className="story how-it-works-card">
+              <h2>Como funciona</h2>
+              <p>
+                Com o protocolo e a chave de acesso você vê em que etapa está a sua manifestação, lê
+                a resposta da Ouvidoria e envia informações quando a gente pedir.
+              </p>
+              <p style={{ marginTop: "12px" }}>
+                A chave aparece uma única vez, no comprovante. Se você a perdeu, use “Perdi minha
+                chave”.
+              </p>
+            </section>
+          ) : answered ? (
             <>
               <div className="info answered-notice">
                 <img src="/assets/info.svg" alt="" />
@@ -1691,6 +1724,7 @@ export default function App() {
       {page === "report" && <ReportStep go={go} report={report} setReport={setReport} />}
       {page === "review" && <ReviewStep go={go} report={report} />}
       {page === "receipt" && <Receipt go={go} />}
+      {page === "tracking-search" && <Tracking go={go} state="search" />}
       {page === "tracking-waiting" && <Tracking go={go} state="waiting" />}
       {page === "tracking-analysis" && <Tracking go={go} state="analysis" />}
       {page === "tracking-answered" && <Tracking go={go} state="answered" />}
