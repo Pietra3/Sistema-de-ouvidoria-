@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 
 type Page =
   | "login"
+  | "create-password"
   | "home"
   | "type"
   | "identity"
@@ -146,7 +147,9 @@ function Login({ go }: { go: (page: Page) => void }) {
           <div className="login-password-group">
             <div className="login-password-head">
               <strong>Senha</strong>
-              <a className="forgot-link">Esqueci minha senha</a>
+              <a className="forgot-link" onClick={() => go("create-password")}>
+                Esqueci minha senha
+              </a>
             </div>
             <div className="login-password-field">
               <input type={show ? "text" : "password"} placeholder="Digite sua senha" />
@@ -170,6 +173,99 @@ function Login({ go }: { go: (page: Page) => void }) {
           <button className="button primary full login-submit" onClick={() => go("home")}>
             Entrar com senha
           </button>
+        </section>
+      </main>
+    </>
+  );
+}
+
+function CreatePassword({ go }: { go: (page: Page) => void }) {
+  const [showNew, setShowNew] = useState(false);
+  const [showRepeat, setShowRepeat] = useState(false);
+  return (
+    <>
+      <div className="login-nav">
+        <div className="wide login-nav-inner">
+          <strong>icone da empresa</strong>
+          <div>
+            Ouvidoria Nacional　 Central de Relacionamento: <a>0000 570 0000</a>　{" "}
+            <a>Política de privacidade (LGPD)</a>
+          </div>
+        </div>
+      </div>
+      <main className="login-main">
+        <section className="login-card create-password-card">
+          <div className="login-header">
+            <h1>Crie sua senha</h1>
+            <p>
+              Convite para <b>juliana.prado@go.sebrae.com.br</b> · válido até 10/11/2026 às 16:40
+              (2 horas a partir do envio).
+            </p>
+          </div>
+          <div className="login-password-group">
+            <div className="login-password-head">
+              <strong>Nova senha</strong>
+            </div>
+            <div className="login-password-field">
+              <input
+                type={showNew ? "text" : "password"}
+                defaultValue="Senhaboa2026!"
+                placeholder="Digite a nova senha"
+              />
+              <button
+                type="button"
+                className="login-show-btn"
+                onClick={() => setShowNew(!showNew)}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                {showNew ? "Ocultar" : "Mostrar"}
+              </button>
+            </div>
+            <small className="password-hint">Mínimo de 12 caracteres (política da A5)</small>
+          </div>
+          <div className="login-password-group">
+            <div className="login-password-head">
+              <strong>Repita a senha</strong>
+            </div>
+            <div className="login-password-field">
+              <input
+                type={showRepeat ? "text" : "password"}
+                defaultValue="Senhaboa2026!"
+                placeholder="Repita a nova senha"
+              />
+              <button
+                type="button"
+                className="login-show-btn"
+                onClick={() => setShowRepeat(!showRepeat)}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                {showRepeat ? "Ocultar" : "Mostrar"}
+              </button>
+            </div>
+          </div>
+          <button className="button primary full login-submit" onClick={() => go("home")}>
+            Criar senha e entrar
+          </button>
+          <div className="complaint-notice create-password-notice">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: "2px" }}>
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <span>
+              Convite vencido mostra “convite expirado” e pede ao Administrador (ou ao operador, no
+              caso de temporário) que reenvie. O reenvio gera um token novo.
+            </span>
+          </div>
+          <a className="forgot-link back-to-login" onClick={() => go("login")}>
+            ← Voltar para o login
+          </a>
         </section>
       </main>
     </>
@@ -1704,7 +1800,7 @@ export default function App() {
     setPage(next);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  const login = page === "login";
+  const login = page === "login" || page === "create-password";
   const isComplaintPage = page.startsWith("complaint-");
   return (
     <div className={contrast ? "app high-contrast" : "app"} style={{ fontSize: `${scale}em` }}>
@@ -1716,6 +1812,7 @@ export default function App() {
       />
       {!login && <Header go={go} complaint={isComplaintPage} />}
       {page === "login" && <Login go={go} />}
+      {page === "create-password" && <CreatePassword go={go} />}
       {page === "home" && <Home go={go} />}
       {page === "type" && <TypeStep go={go} />}
       {page === "identity" && (

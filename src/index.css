@@ -365,6 +365,24 @@ footer {
   min-height: 50px;
   font-size: 15px;
 }
+.create-password-card {
+  width: min(464px, 100%);
+}
+.password-hint {
+  color: #64748b;
+  font-size: 13px;
+  font-family: "Figtree:Regular", Arial, sans-serif;
+}
+.create-password-notice {
+  margin-top: 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  font-family: "Figtree:Regular", Arial, sans-serif;
+}
+.back-to-login {
+  align-self: center;
+  font-size: 14px;
+}
 label {
   display: block;
 }
