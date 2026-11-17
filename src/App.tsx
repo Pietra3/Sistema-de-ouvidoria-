@@ -5,6 +5,7 @@ type Page =
   | "create-password"
   | "home"
   | "privacy"
+  | "internal"
   | "type"
   | "identity"
   | "report"
@@ -99,6 +100,7 @@ function Header({ go, complaint = false }: { go: (page: Page) => void; complaint
           <button onClick={() => go(complaint ? "complaint-tracking-waiting" : "tracking-search")}>
             Acompanhar protocolo
           </button>
+          <button onClick={() => go("internal")}>Painel interno</button>
         </nav>
       </div>
     </header>
@@ -115,7 +117,7 @@ function Footer({ go, login = false }: { go: (page: Page) => void; login?: boole
           <span>
             Central de Relacionamento: <a href="tel:08005700800">0800 570 0800</a>
           </span>
-          <a onClick={() => go("privacy")}>Privacidade e direitos do titular (LGPD)</a>
+          <a onClick={() => go("privacy")}>Política de privacidade (LGPD)</a>
         </div>
       </div>
     </footer>
@@ -131,7 +133,7 @@ function Login({ go }: { go: (page: Page) => void }) {
           <strong>icone da empresa</strong>
           <div>
             Ouvidoria Nacional　 Central de Relacionamento: <a>0000 570 0000</a>　{" "}
-            <a onClick={() => go("privacy")}>Privacidade e direitos do titular (LGPD)</a>
+            <a onClick={() => go("privacy")}>Política de privacidade (LGPD)</a>
           </div>
         </div>
       </div>
@@ -174,6 +176,9 @@ function Login({ go }: { go: (page: Page) => void }) {
           <button className="button primary full login-submit" onClick={() => go("home")}>
             Entrar com senha
           </button>
+          <button className="button secondary full login-submit" onClick={() => go("internal")}>
+            Acessar painel interno
+          </button>
         </section>
       </main>
     </>
@@ -190,7 +195,7 @@ function CreatePassword({ go }: { go: (page: Page) => void }) {
           <strong>icone da empresa</strong>
           <div>
             Ouvidoria Nacional　 Central de Relacionamento: <a>0000 570 0000</a>　{" "}
-            <a>Política de privacidade (LGPD)</a>
+            <a onClick={() => go("privacy")}>Política de privacidade (LGPD)</a>
           </div>
         </div>
       </div>
@@ -1976,6 +1981,150 @@ function PrivacyPage({ go }: { go: (p: Page) => void }) {
   );
 }
 
+function InternalPanel({ go }: { go: (p: Page) => void }) {
+  const [activeMenu, setActiveMenu] = useState("Triagem");
+  const [unit, setUnit] = useState("Sebrae/GO");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const menuGroups: Array<{
+    section: string;
+    items: Array<{ label: string; badge?: number }>;
+  }> = [
+    {
+      section: "OUVIDORIA",
+      items: [
+        { label: "Triagem", badge: 12 },
+        { label: "Caixa de entrada", badge: 18 },
+        { label: "Registrar atendimento" },
+        { label: "Melhorias" },
+      ],
+    },
+    {
+      section: "RELATÓRIOS",
+      items: [{ label: "Dashboards" }, { label: "Relatórios" }, { label: "Exportação" }],
+    },
+    {
+      section: "AUDITORIA",
+      items: [{ label: "Anexos bloqueados" }],
+    },
+    {
+      section: "AJUDA",
+      items: [{ label: "Central de ajuda" }],
+    },
+  ];
+
+  return (
+    <div className="internal-layout">
+      <aside className="internal-sidebar">
+        <div className="internal-brand-wrap">
+          <button type="button" className="internal-logo-box" onClick={() => go("home")}>
+            LOGO DA EMPRESA
+          </button>
+          <p className="internal-brand-sub">Ouvidoria e Canal de Denúncias</p>
+        </div>
+
+        <nav className="internal-nav" aria-label="Menu principal interno">
+          {menuGroups.map((group) => (
+            <div className="internal-nav-group" key={group.section}>
+              <span className="internal-nav-section">{group.section}</span>
+              {group.items.map((item) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  className={
+                    activeMenu === item.label ? "internal-nav-item active" : "internal-nav-item"
+                  }
+                  onClick={() => setActiveMenu(item.label)}
+                >
+                  <span>{item.label}</span>
+                  {item.badge !== undefined && (
+                    <span className="internal-nav-badge">{item.badge}</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          ))}
+        </nav>
+
+        <div className="internal-sidebar-footer">
+          <p>
+            Ver como: <b>Ana Paula Ribeiro</b>
+          </p>
+          <span>Operadora · Ouvidoria {unit}</span>
+          <button
+            type="button"
+            className="internal-portal-switch"
+            onClick={() => go("home")}
+          >
+            ← Voltar ao Portal Público
+          </button>
+        </div>
+      </aside>
+
+      <div className="internal-main-area">
+        <header className="internal-topbar">
+          <div className="internal-topbar-left">
+            <label className="internal-unit-label">
+              <span>Unidade</span>
+              <select value={unit} onChange={(e) => setUnit(e.target.value)}>
+                <option>Sebrae/GO</option>
+                <option>Sebrae Nacional</option>
+                <option>Sebrae/BA</option>
+                <option>Sebrae/SP</option>
+              </select>
+            </label>
+            <div className="internal-search-box">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Buscar protocolo (ex.: 2026-000123)"
+              />
+            </div>
+            <button
+              type="button"
+              className="internal-icon-btn"
+              title="Notificações"
+              aria-label="5 notificações não lidas"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+              </svg>
+              <span className="notif-badge">5</span>
+            </button>
+            <button
+              type="button"
+              className="internal-icon-btn"
+              title="Ajuda desta tela"
+              aria-label="Ajuda desta tela"
+              onClick={() => setActiveMenu("Central de ajuda")}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="internal-user-info">
+            <strong>Ana Paula Ribeiro</strong>
+            <span>Operadora · Ouvidoria {unit}</span>
+          </div>
+        </header>
+
+        <main className="internal-workspace">
+          {/* Espaço da tela interna selecionada */}
+        </main>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [page, setPage] = useState<Page>("login");
   const [scale, setScale] = useState(1);
@@ -1987,20 +2136,24 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const login = page === "login" || page === "create-password";
+  const isInternal = page === "internal";
   const isComplaintPage = page.startsWith("complaint-");
   return (
     <div className={contrast ? "app high-contrast" : "app"} style={{ fontSize: `${scale}em` }}>
-      <Accessibility
-        scale={scale}
-        setScale={setScale}
-        contrast={contrast}
-        setContrast={setContrast}
-      />
-      {!login && <Header go={go} complaint={isComplaintPage} />}
+      {!isInternal && (
+        <Accessibility
+          scale={scale}
+          setScale={setScale}
+          contrast={contrast}
+          setContrast={setContrast}
+        />
+      )}
+      {!login && !isInternal && <Header go={go} complaint={isComplaintPage} />}
       {page === "login" && <Login go={go} />}
       {page === "create-password" && <CreatePassword go={go} />}
       {page === "home" && <Home go={go} />}
       {page === "privacy" && <PrivacyPage go={go} />}
+      {page === "internal" && <InternalPanel go={go} />}
       {page === "type" && <TypeStep go={go} />}
       {page === "identity" && (
         <IdentityStep go={go} anonymous={anonymous} setAnonymous={setAnonymous} />
@@ -2019,7 +2172,7 @@ export default function App() {
       {page === "complaint-tracking-waiting" && <ComplaintTracking go={go} state="waiting" />}
       {page === "complaint-tracking-analysis" && <ComplaintTracking go={go} state="analysis" />}
       {page === "complaint-tracking-concluded" && <ComplaintTracking go={go} state="concluded" />}
-      <Footer go={go} login={login} />
+      {!isInternal && <Footer go={go} login={login} />}
     </div>
   );
 }
