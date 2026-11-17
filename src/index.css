@@ -1848,7 +1848,9 @@ textarea {
   }
   .assurance-grid,
   .complaint-options,
-  .person-row {
+  .person-row,
+  .privacy-type-grid,
+  .privacy-dl {
     grid-template-columns: 1fr;
   }
   .people-columns-head {
@@ -1858,4 +1860,121 @@ textarea {
     gap: 15px;
     flex-wrap: wrap;
   }
+}
+
+.privacy-main {
+  padding-block: 24px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.privacy-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.privacy-tabs button {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 2px solid #cbd5e1;
+  background: #fff;
+  color: #334155;
+  font-family: "Figtree:Bold", Arial, sans-serif;
+  font-size: 14px;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+}
+.privacy-tabs button:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+.privacy-tabs button.active {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+.privacy-tabs button.denuncias-tab.active {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+.privacy-info-card,
+.privacy-request-card {
+  margin-top: 0;
+}
+.privacy-dl {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 14px 24px;
+  margin: 0;
+}
+.privacy-dl dt {
+  color: #475569;
+  font-family: "Figtree:Regular", Arial, sans-serif;
+}
+.privacy-dl dd {
+  margin: 0;
+  color: #0f172a;
+}
+.privacy-type-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.privacy-type-grid button {
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  background: #fff;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+.privacy-type-grid button:not(.selected):hover {
+  background: #f6fcf8;
+  border-color: #8bb8ad;
+  box-shadow: 0 3px 10px rgba(0, 78, 78, 0.08);
+  transform: translateY(-1px);
+}
+.privacy-type-grid button.selected {
+  background: #e9f8ef;
+  border-color: var(--green);
+  box-shadow: 0 3px 10px rgba(0, 78, 78, 0.1);
+}
+.privacy-type-grid button strong {
+  font-size: 16px;
+  color: #0f172a;
+}
+.privacy-type-grid button.selected strong {
+  color: var(--green);
+}
+.privacy-type-grid button span {
+  font-size: 13.5px;
+  color: #475569;
+  font-family: "Figtree:Regular", Arial, sans-serif;
+}
+.privacy-request-card input,
+.privacy-request-card textarea {
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+}
+.privacy-request-card textarea {
+  min-height: 110px;
+}
+.req-star {
+  color: #dc2626;
+}
+.privacy-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 4px;
 }

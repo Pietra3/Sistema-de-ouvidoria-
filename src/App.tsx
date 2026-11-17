@@ -4,6 +4,7 @@ type Page =
   | "login"
   | "create-password"
   | "home"
+  | "privacy"
   | "type"
   | "identity"
   | "report"
@@ -104,7 +105,7 @@ function Header({ go, complaint = false }: { go: (page: Page) => void; complaint
   );
 }
 
-function Footer({ login = false }: { login?: boolean }) {
+function Footer({ go, login = false }: { go: (page: Page) => void; login?: boolean }) {
   return (
     <footer className={login ? "login-footer" : ""}>
       <div className="wide footer-inner">
@@ -114,7 +115,7 @@ function Footer({ login = false }: { login?: boolean }) {
           <span>
             Central de Relacionamento: <a href="tel:08005700800">0800 570 0800</a>
           </span>
-          <a href="#privacidade">Política de privacidade (LGPD)</a>
+          <a onClick={() => go("privacy")}>Privacidade e direitos do titular (LGPD)</a>
         </div>
       </div>
     </footer>
@@ -130,7 +131,7 @@ function Login({ go }: { go: (page: Page) => void }) {
           <strong>icone da empresa</strong>
           <div>
             Ouvidoria Nacional　 Central de Relacionamento: <a>0000 570 0000</a>　{" "}
-            <a>Política de privacidade (LGPD)</a>
+            <a onClick={() => go("privacy")}>Privacidade e direitos do titular (LGPD)</a>
           </div>
         </div>
       </div>
@@ -1262,7 +1263,8 @@ function ComplaintIntro({ go }: { go: (p: Page) => void }) {
             </button>
           </div>
           <p>
-            Como tratamos seus dados: <a>aviso de privacidade do Canal de Denúncias.</a>
+            Como tratamos seus dados:{" "}
+            <a onClick={() => go("privacy")}>aviso de privacidade do Canal de Denúncias.</a>
           </p>
         </section>
         <div className="complaint-notice">
@@ -1790,6 +1792,190 @@ function ComplaintTracking({
   );
 }
 
+function PrivacyPage({ go }: { go: (p: Page) => void }) {
+  const [tab, setTab] = useState<"ouvidoria" | "denuncias">("ouvidoria");
+  const [reqType, setReqType] = useState<"Acesso" | "Correção" | "Eliminação">("Acesso");
+  const [sent, setSent] = useState(false);
+
+  const requestOptions: Array<[typeof reqType, string]> = [
+    ["Acesso", "Saber quais dados temos sobre você"],
+    ["Correção", "Corrigir dado incompleto ou errado"],
+    ["Eliminação", "Apagar o que não precisa ser guardado"],
+  ];
+
+  return (
+    <>
+      <section className={tab === "denuncias" ? "complaint-hero" : "form-hero"}>
+        <div className="form-width">
+          <p className="eyebrow">
+            {tab === "denuncias" ? "Canal de denúncias · LGPD" : "Ouvidoria · LGPD"}
+          </p>
+          <h1>Privacidade e direitos do titular</h1>
+          <p>
+            {tab === "denuncias"
+              ? "Aviso de privacidade do Canal de Denúncias · versão de 10/11/2026"
+              : "Aviso de privacidade da Ouvidoria · versão de 10/11/2026"}
+          </p>
+        </div>
+      </section>
+      <main className="form-width privacy-main">
+        <div className="privacy-tabs">
+          <button
+            type="button"
+            className={tab === "ouvidoria" ? "active" : ""}
+            onClick={() => setTab("ouvidoria")}
+          >
+            Aviso da Ouvidoria
+          </button>
+          <button
+            type="button"
+            className={tab === "denuncias" ? "active denuncias-tab" : "denuncias-tab"}
+            onClick={() => setTab("denuncias")}
+          >
+            Aviso do Canal de Denúncias
+          </button>
+        </div>
+
+        <section className="form-card privacy-info-card">
+          <h2 style={tab === "denuncias" ? { color: "var(--red)" } : undefined}>
+            Como tratamos seus dados
+          </h2>
+          {tab === "ouvidoria" ? (
+            <dl className="privacy-dl">
+              <dt>Controlador</dt>
+              <dd>
+                <b>Sebrae — Serviço Brasileiro de Apoio às Micro e Pequenas Empresas</b>
+              </dd>
+              <dt>Finalidade</dt>
+              <dd>
+                <b>Receber, tratar e responder sua manifestação e medir a satisfação</b>
+              </dd>
+              <dt>Compartilhamento</dt>
+              <dd>
+                <b>
+                  Só com a área do Sebrae que precisa responder; nunca para marketing de terceiros
+                </b>
+              </dd>
+              <dt>Contato</dt>
+              <dd>
+                <b>Só se você autorizar; dá para revogar a qualquer momento</b>
+              </dd>
+              <dt>Guarda</dt>
+              <dd>
+                <b>60 meses após o encerramento; depois, anonimização</b>
+              </dd>
+              <dt>Encarregado (DPO)</dt>
+              <dd>
+                <b>encarregado@sebrae.com.br</b>
+              </dd>
+            </dl>
+          ) : (
+            <dl className="privacy-dl">
+              <dt>Controlador</dt>
+              <dd>
+                <b>Sebrae — Serviço Brasileiro de Apoio às Micro e Pequenas Empresas</b>
+              </dd>
+              <dt>Finalidade</dt>
+              <dd>
+                <b>Receber e apurar relatos de violação ao Código de Ética com sigilo</b>
+              </dd>
+              <dt>Compartilhamento</dt>
+              <dd>
+                <b>
+                  Restrito exclusivamente à Comissão de Ética e investigadores sem conflito de
+                  interesse
+                </b>
+              </dd>
+              <dt>Rastreamento</dt>
+              <dd>
+                <b>Não gravamos IP, navegador, cookies de rastreio nem metadados (EXIF) de fotos</b>
+              </dd>
+              <dt>Guarda</dt>
+              <dd>
+                <b>60 meses após a conclusão da apuração; depois, anonimização</b>
+              </dd>
+              <dt>Encarregado (DPO)</dt>
+              <dd>
+                <b>encarregado@sebrae.com.br</b>
+              </dd>
+            </dl>
+          )}
+        </section>
+
+        <section className="form-card privacy-request-card">
+          {sent ? (
+            <div className="rating-success" style={{ padding: "8px 0" }}>
+              <h2>Pedido registrado</h2>
+              <p>
+                Recebemos a sua solicitação de <b>{reqType.toLowerCase()}</b> como titular dos
+                dados. O nosso Encarregado (DPO) responderá pelo e-mail informado dentro do prazo
+                legal da LGPD.
+              </p>
+              <div className="button-row" style={{ marginTop: "8px" }}>
+                <button className="button primary" onClick={() => setSent(false)}>
+                  Novo pedido
+                </button>
+                <button className="button secondary" onClick={() => go("home")}>
+                  Voltar ao início
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <h2>Fazer um pedido como titular dos dados</h2>
+              <div className="privacy-type-grid">
+                {requestOptions.map(([title, desc]) => (
+                  <button
+                    key={title}
+                    type="button"
+                    className={reqType === title ? "selected" : ""}
+                    onClick={() => setReqType(title)}
+                  >
+                    <strong>{title}</strong>
+                    <span>{desc}</span>
+                  </button>
+                ))}
+              </div>
+              <div className="two-cols">
+                <label>
+                  Nome completo <span className="req-star">*</span>
+                  <input defaultValue="Carla Mendes de Souza" />
+                </label>
+                <label>
+                  CPF <span className="req-star">*</span>
+                  <input defaultValue="048.482.917-30" />
+                </label>
+              </div>
+              <div className="two-cols">
+                <label>
+                  E-mail <span className="req-star">*</span>
+                  <input type="email" defaultValue="carla.mendes@gmail.com" />
+                </label>
+                <label>
+                  Protocolo relacionado <small>(opcional)</small>
+                  <input defaultValue="2026-000123" />
+                </label>
+              </div>
+              <label>
+                Detalhe do pedido
+                <textarea defaultValue="Quero saber quais dados pessoais meus estão guardados na manifestação 2026-000123 e por quanto tempo." />
+              </label>
+              <div className="privacy-actions">
+                <button className="button secondary" onClick={() => go("home")}>
+                  Voltar
+                </button>
+                <button className="button primary" onClick={() => setSent(true)}>
+                  Enviar pedido
+                </button>
+              </div>
+            </>
+          )}
+        </section>
+      </main>
+    </>
+  );
+}
+
 export default function App() {
   const [page, setPage] = useState<Page>("login");
   const [scale, setScale] = useState(1);
@@ -1814,6 +2000,7 @@ export default function App() {
       {page === "login" && <Login go={go} />}
       {page === "create-password" && <CreatePassword go={go} />}
       {page === "home" && <Home go={go} />}
+      {page === "privacy" && <PrivacyPage go={go} />}
       {page === "type" && <TypeStep go={go} />}
       {page === "identity" && (
         <IdentityStep go={go} anonymous={anonymous} setAnonymous={setAnonymous} />
@@ -1832,7 +2019,7 @@ export default function App() {
       {page === "complaint-tracking-waiting" && <ComplaintTracking go={go} state="waiting" />}
       {page === "complaint-tracking-analysis" && <ComplaintTracking go={go} state="analysis" />}
       {page === "complaint-tracking-concluded" && <ComplaintTracking go={go} state="concluded" />}
-      <Footer login={login} />
+      <Footer go={go} login={login} />
     </div>
   );
 }
